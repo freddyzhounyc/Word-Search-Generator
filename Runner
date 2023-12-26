@@ -1,0 +1,220 @@
+//Generate a word search game puzzle with with first 25 US states to be randomly put into the grid without colliding with one another.
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+ofstream fout;
+ifstream fin;
+const int gridSize = 25;
+char grid[gridSize][gridSize];
+
+int deltaR[8] = {0,-1,-1,-1,0,1,1,1};
+int deltaC[8] = {1,1,0,-1,-1,-1,0,1};
+
+void reset(){
+	for (int r=0; r<gridSize; r++){
+		for (int c=0; c<gridSize; c++){
+			grid[r][c] = '-';
+		}
+	}
+}
+
+void display(){
+	for (int r=0; r<gridSize; r++){
+		for (int c=0; c<gridSize; c++){
+			cout << grid[r][c] << " ";
+		}
+		cout <<endl;
+	}
+}
+
+void printOut(){
+	for (int r=0; r<gridSize; r++){
+		for (int c=0; c<gridSize; c++){
+			fout << grid[r][c] << " ";
+		}
+		fout <<endl;
+	}
+}
+
+bool isSafe(int r, int c, int rowstart, int colstart, string word, int randDirect){
+	for (int r=0, c=0, countOfLetters = 0; countOfLetters < word.length(); r+=deltaR[randDirect], c+=deltaC[randDirect], countOfLetters++){
+		if (grid[rowstart + r][colstart + c] != '-'){
+			return false;
+		}
+	}
+	return true;
+}
+
+void wordPrint(string word, int randint){
+	int rowstart;
+	int colstart;
+	int r,c;
+	
+	//Horizontal(LR) = 0
+	int rowstart0 = rand() % gridSize;
+	int colstart0 = rand() % (gridSize - word.length()) + 1;
+	
+	//Diagonal(LB RT) = 1
+	int rowstart1 = (rand() % (gridSize - word.length()) + 1) + (word.length() - 1);
+	int colstart1 = (rand() % (gridSize - word.length()) + 1);
+	
+	//Vertical(BT) = 2
+	int rowstart2 = (rand() % (gridSize - word.length()) + 1) + (word.length() - 1);
+	int colstart2 = rand() % gridSize;
+	
+	//Diagonal(RB LT) = 3
+	int rowstart3 = (rand() % (gridSize - word.length()) + 1) + (word.length() - 1);
+	int colstart3 = (rand() % (gridSize - word.length()) + 1) + (word.length() - 1);
+	
+	//Horizontal(RL) = 4
+	int rowstart4 = rand() % gridSize;
+	int colstart4 = rand() % (gridSize - word.length() + 1) + (word.length() - 1);
+	
+	//Diagonal(RT LB) = 5
+	int rowstart5 = rand() % (gridSize - word.length());
+	int colstart5 = rand() % (gridSize - word.length() + 1) + (word.length() - 1);
+	
+	//Vertical(TB) = 6
+	int rowstart6 = rand() % (gridSize - word.length() + 1);
+	int colstart6 = rand() % gridSize;
+	
+	//Diagonal(TL BR) = 7
+	int rowstart7 = rand() % (gridSize - word.length() + 1);
+	int colstart7 = rand() % (gridSize - word.length() + 1);
+	
+	int randDirect = randint % 8;
+	
+	if (randDirect == 0){
+		rowstart = rowstart0;
+		colstart = colstart0;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 1){
+		rowstart = rowstart1;
+		colstart = colstart1;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 2){
+		rowstart = rowstart2;
+		colstart = colstart2;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 3){
+		rowstart = rowstart3;
+		colstart = colstart3;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 4){
+		rowstart = rowstart4;
+		colstart = colstart4;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 5){
+		rowstart = rowstart5;
+		colstart = colstart5;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 6){
+		rowstart = rowstart6;
+		colstart = colstart6;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	if (randDirect == 7){
+		rowstart = rowstart7;
+		colstart = colstart7;
+		r = deltaR[randDirect];
+		c = deltaC[randDirect];
+	}
+	
+	if (isSafe(r, c, rowstart, colstart, word, randDirect) == true){
+		for (int r=0, c=0, countOfLetters = 0; countOfLetters < word.length(); r+=deltaR[randDirect], c+=deltaC[randDirect], countOfLetters++){
+			if (randDirect == 0){
+				grid[rowstart0 + r][colstart0 + c] = word[countOfLetters];
+			}
+			if (randDirect == 1){
+				grid[rowstart1 + r][colstart1 + c] = word[countOfLetters];
+			}
+			if (randDirect == 2){
+				grid[rowstart2 + r][colstart2 + c] = word[countOfLetters];
+			}
+			if (randDirect == 3){
+				grid[rowstart3 + r][colstart3 + c] = word[countOfLetters];
+			}
+			if (randDirect == 4){
+				grid[rowstart4 + r][colstart4 + c] = word[countOfLetters];
+			}
+			if (randDirect == 5){
+				grid[rowstart5 + r][colstart5 + c] = word[countOfLetters];
+			}
+			if (randDirect == 6){
+				grid[rowstart6 + r][colstart6 + c] = word[countOfLetters];
+			}
+			if (randDirect == 7){
+				grid[rowstart7 + r][colstart7 + c] = word[countOfLetters];
+			}
+		}
+	}
+	else{
+		wordPrint(word, randint);
+	}
+}
+
+void fillGrid(int r, int c, char letter){
+	if (grid[r][c] == '-'){
+		grid[r][c] = letter;
+	}
+}
+
+int main(){
+	srand(time(0));
+	const int numPlays = 25;
+	
+	string takeIn;
+	bool printing = true;
+	int counter1 = 0, counter2 = 0;
+	
+	string wordbank[50] = {};
+	reset();
+	
+	fin.open("US_States.txt");
+	while (fin >> takeIn){
+		wordbank[counter1] = takeIn;
+		counter1++;
+	}
+	fin.close();
+	
+	for (int i=0; i<numPlays; i++){
+		int randint = rand();
+		
+		string word = wordbank[i];
+		wordPrint(word, randint);
+	}
+	
+	fout.open("puzzle.txt");
+	printOut();
+	
+	fout <<endl;
+	fout << "Wordbank:" <<endl;
+	for (int i=0; i<numPlays; i++){
+		fout << i+1 << ". " <<wordbank[i] <<endl;
+	}
+	fout <<endl;
+	for (int r=0; r<gridSize; r++){
+		for (int c=0; c<gridSize; c++){
+			char letter = rand() % (90-65+1) + 65;
+			fillGrid(r, c, letter);
+		}
+	}
+	
+	printOut();
+}
